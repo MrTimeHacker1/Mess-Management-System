@@ -4,7 +4,7 @@ const MealSchema = new mongoose.Schema({
   hallName: {
     type: String,
     required: true,
-    enum: ['Hall-1', 'Hall-3', 'Hall-4', 'Hall-6'], // Based on your menus
+    enum: ['Hall-1', 'Hall-3', 'Hall-4', 'Hall-6', 'Hall-12', 'Hall-13'], // Based on your menus
   },
   month: {
     type: String,
