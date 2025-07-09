@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mess_management_system';
 
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URI)
   .then(() => {
     dbConnected = true;
     app.listen(PORT, () => {
@@ -27,6 +27,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
+    process.exit(1);
   });
 
 // Import routes
