@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Meal = require('../models/Meal');
+const connectDB = require('./mongodb');
 
 const menuData = {
   'Hall-1': {
@@ -786,14 +787,21 @@ const menuData = {
 
 async function seedMenuData() {
   try {
+    // Connect to database
+    console.log('Connecting to database...');
+    await connectDB();
+    console.log('Database connected successfully');
+
     // Clear existing menu data
     await Meal.deleteMany({});
     console.log('Cleared existing menu data');
 
     const mealsToInsert = [];
+    console.log('Processing menu data...');
 
     // Process each hall
     for (const [hallName, hallData] of Object.entries(menuData)) {
+      console.log(`Processing ${hallName}...`);
       // Process each day
       for (const [day, dayData] of Object.entries(hallData)) {
         // Process each meal type
@@ -818,11 +826,19 @@ async function seedMenuData() {
       }
     }
 
+    console.log(`Prepared ${mealsToInsert.length} meal entries for insertion`);
+    
     // Insert all meals
     await Meal.insertMany(mealsToInsert);
     console.log(`Successfully seeded ${mealsToInsert.length} meal entries`);
+    
+    // Verify insertion by counting documents
+    const count = await Meal.countDocuments({});
+    console.log(`Database verification: ${count} meal entries found in database`);
+    
   } catch (error) {
     console.error('Error seeding menu data:', error);
+    throw error; // Re-throw to handle in calling code
   }
 }
 
